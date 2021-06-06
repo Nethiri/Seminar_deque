@@ -7,8 +7,8 @@ typedef struct deque {
 } deque_t;
 
 void deque_add_front(void*, deque_t*);
-void deque_add_back();
-void* deque_del_front();
+void deque_add_back(void*, deque_t*);
+void* deque_del_front(deque_t*);
 void* deque_del_back();
 void deque_display();
 int deque_count();
@@ -63,6 +63,28 @@ void deque_add_back(void* value, deque_t* myQue){
     return;                                         // returns the function
 }
 
+void* deque_del_front(deque_t* myQue) {
+    void* toDel;
+    if(myQue->front == -1){                         // check if the front pointer is defined
+        printf("The Deque is empty!\n");            // if not, state error to the user
+        return 0;                                   // returns the function
+    }
+    toDel = myQue->array[myQue->front];             // gets the data which is to be deleted
+    myQue->array[myQue->front] = NULL;              // pointles display operation -> you just have to move the pointer
 
+    if(myQue->front == myQue->back) {               // checks if both pointer point to the same position
+        myQue->front = myQue->back = -1;            // if so, this is the last entry, resets pointer to undefined
+    }   else{                                       // if the pointers are difrent
+        myQue->front--;                             // decrement front pointer
+        if(myQue->front == -1) {                    // if front pointer underflows
+            myQue->front = MAX -1;                  // set front pointer to MAX - 1;
+        }  
+    }
+    return toDel;                                   // returns the function with the deleted value
+}
+
+void* deque_del_back(deque_t* myQue) {
+    
+}
 
 
