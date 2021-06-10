@@ -6,13 +6,15 @@ typedef struct deque {
     void* array[MAX];
 } deque_t; 
 
-void deque_add_front(void*, deque_t*);
-void deque_add_back(void*, deque_t*);
-void* deque_del_front(deque_t*);
-void* deque_del_back(deque_t*);
-void deque_display_int(deque_t*);
-int deque_count(deque_t*);
-//examine first / last element
+void deque_add_front(void*, deque_t*);              // adds an element to the front
+void deque_add_back(void*, deque_t*);               // adds an element to the back
+void* deque_del_front(deque_t*);                    // deletes an element from the front (and returns the element)
+void* deque_del_back(deque_t*);                     // deletes an element from the back (and returns the element)
+void deque_display_int(deque_t*);                   // displays the deque
+int deque_count(deque_t*);                          // counts the amount of elements in the que
+void* deque_look_front(deque_t*);                   // returns the front element       
+void* deque_look_back(deque_t*);                    // retunrs the back element
+
 
 
 void main() {
@@ -124,7 +126,7 @@ void deque_add_back(void* value, deque_t* myQue){
 void* deque_del_front(deque_t* myQue) {
     void* toDel;
     if(myQue->front == -1){                         // check if the front pointer is defined
-        printf("\nThe Deque is empty!\n");            // if not, state error to the user
+        printf("\nThe Deque is empty!\n");          // if not, state error to the user
         return 0;                                   // returns the function
     }
     toDel = myQue->array[myQue->front];             // gets the data which is to be deleted
@@ -144,11 +146,11 @@ void* deque_del_front(deque_t* myQue) {
 void* deque_del_back(deque_t* myQue) {
     void* toDel;
     if(myQue->front == -1){                         // check if the front pointer is defined
-        printf("\nThe Deque is empty!\n");            // if not, state error to the user
+        printf("\nThe Deque is empty!\n");          // if not, state error to the user
         return 0;                                   // returns the function
     }
     toDel = myQue->array[myQue->back];              // gets the date which is to be deleted
-    myQue->array[myQue->back] = NULL;              // pointles display operation -> you just have to move the pointer
+    myQue->array[myQue->back] = NULL;               // pointles display operation -> you just have to move the pointer
 
     if(myQue->front == myQue->back) {               // checks if both pointer point to the same position
         myQue->front = myQue->back = -1;            // if so, this is the last entry, resets pointer to undefined
@@ -166,7 +168,7 @@ void deque_display_int(deque_t* myQue) {
     for(int i = 0; i < MAX; i++){                   // loop through the que
         printf(" %d", myQue->array[i]);             // prints the position of the que
     }   
-    printf(" :Back\n");                               // prints the end of the list
+    printf(" :Back\n");                             // prints the end of the list
 }
 
 int deque_count(deque_t* myQue) {
@@ -177,4 +179,20 @@ int deque_count(deque_t* myQue) {
         }
     }
     return c;                                       // returns function with the counting variable
+}
+
+void* deque_look_front(deque_t* myQue) {
+    if(myQue->front == -1){                         // check if the front pointer is defined
+        printf("\nThe Deque is empty!\n");          // if not, state error to the user
+        return 0;                                   // returns the function
+    }
+    return myQue->array[myQue->front];              // returns the function with the front element
+}
+
+void* deque_look_back(deque_t* myQue) {
+    if(myQue->front == -1){                         // check if the front pointer is defined
+        printf("\nThe Deque is empty!\n");          // if not, state error to the user
+        return 0;                                   // returns the function
+    }
+    return myQue->array[myQue->back];               // returns the function with the back element
 }
