@@ -15,37 +15,48 @@ int deque_count(deque_t*);                          // counts the amount of elem
 void* deque_look_front(deque_t*);                   // returns the front element       
 void* deque_look_back(deque_t*);                    // retunrs the back element
 
-
-
 void main() {
     deque_t myTestingQue = {.front = -1};
 
+    printf("\nCreate Deque and add first item into it:");
     deque_add_back((void*)1,&myTestingQue);
+    deque_display_int(&myTestingQue);
+
+    printf("\nNow, lets add a few more objects both to the front and back");
     deque_add_front((void*)2,&myTestingQue);
     deque_add_back((void*)3,&myTestingQue);
     deque_add_front((void*)4,&myTestingQue);
 
-    deque_display_int(&myTestingQue);
+    deque_display_int(&myTestingQue); // more elements
 
     deque_add_back((void*)5,&myTestingQue);
     deque_add_front((void*)6,&myTestingQue);
     deque_add_back((void*)7,&myTestingQue);
     deque_add_front((void*)8,&myTestingQue);
 
-    deque_display_int(&myTestingQue);
+    deque_display_int(&myTestingQue); // more elements
 
     deque_add_back((void*)9,&myTestingQue);
     deque_add_front((void*)10,&myTestingQue);
     deque_add_back((void*)11,&myTestingQue);
     deque_add_front((void*)12,&myTestingQue);
 
-    deque_display_int(&myTestingQue);
+    deque_display_int(&myTestingQue); // more elements
 
     deque_add_back((void*)13,&myTestingQue);
     deque_add_front((void*)14,&myTestingQue);
     deque_add_back((void*)15,&myTestingQue);
     deque_add_front((void*)16,&myTestingQue);
 
+    printf("Now The Deque is full, the last item ('16') could not have been added...");
+    deque_display_int(&myTestingQue);
+
+    printf("\nNow, lets remove some from the back to see how it behaves...");
+    deque_del_back(&myTestingQue);
+    deque_del_back(&myTestingQue);
+    deque_del_back(&myTestingQue);
+    deque_del_back(&myTestingQue);
+
     deque_display_int(&myTestingQue);
 
     deque_del_back(&myTestingQue);
@@ -66,16 +77,21 @@ void main() {
     deque_del_back(&myTestingQue);
     deque_del_back(&myTestingQue);
     deque_del_back(&myTestingQue);
-
+    printf("Now, we've emptied the que, just by deleating from tha back...");    
     deque_display_int(&myTestingQue);
 
-    deque_del_back(&myTestingQue);
-    deque_del_back(&myTestingQue);
-    deque_del_back(&myTestingQue);
-    deque_del_back(&myTestingQue);
+    printf("\nNow, lets add some again :D");
+    deque_add_front((void*)1,&myTestingQue);
+    deque_display_int(&myTestingQue);
+    deque_add_front((void*)2,&myTestingQue);
+    deque_display_int(&myTestingQue);
+    deque_add_front((void*)3,&myTestingQue);
+    deque_display_int(&myTestingQue);
+    deque_add_front((void*)4,&myTestingQue);
+    deque_display_int(&myTestingQue);
     
-    deque_display_int(&myTestingQue);
 
+    printf("\n");
 }
 
 void deque_add_front(void* value, deque_t* myQue){
@@ -164,11 +180,22 @@ void* deque_del_back(deque_t* myQue) {
 }
 
 void deque_display_int(deque_t* myQue) {            
-    printf("\nFront: ");                            // Prints the beginning of the que
+    printf("\nArray Front: ");                            // Prints the beginning of the que
     for(int i = 0; i < MAX; i++){                   // loop through the que
         printf(" %d", myQue->array[i]);             // prints the position of the que
+        if(myQue->array[i] == myQue->array[myQue->front] ){
+            printf("F");
+        }
+        if(myQue->array[i] == myQue->array[myQue->back] ){
+            printf("B");
+        }
+
     }   
-    printf(" :Back\n");                             // prints the end of the list
+    printf(" :Array Back\n");                             // prints the end of the list
+
+    //todo display wo der pointer ist
+
+
 }
 
 int deque_count(deque_t* myQue) {
