@@ -90,7 +90,6 @@ void main() {
     deque_add_front((void*)4,&myTestingQue);
     deque_display_int(&myTestingQue);
     
-
     printf("\n");
 }
 
