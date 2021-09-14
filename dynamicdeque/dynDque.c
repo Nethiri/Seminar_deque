@@ -142,7 +142,7 @@ void deque_add_back(ctrItems_t* deque, void* item) {
 
 void* deque_pop_front(ctrItems_t* deque) {
     if(deque->elementCounter == 0) {
-        printf("Deque is empty!");
+        printf("Deque is empty!\n");
         return NULL;
     }
     
@@ -152,13 +152,14 @@ void* deque_pop_front(ctrItems_t* deque) {
         deque->headBlockIndex--;
         deque->headIndex = 0;
     }
-    else{deque->headIndex--;}
+    else{deque->headIndex++;}
+    deque->elementCounter--;
     return ret;
 }
 
 void* deque_pop_back(ctrItems_t* deque) {
     if(deque->elementCounter == 0) {
-        printf("Deque is empty!");
+        printf("Deque is empty!\n");
         return NULL;
     }
     
@@ -168,7 +169,8 @@ void* deque_pop_back(ctrItems_t* deque) {
         deque->tailBlockIndex++;
         deque->tailIndex = BLOCKSIZE - 1;
     }
-    else{deque->tailIndex++;}
+    else{deque->tailIndex--;}
+    deque->elementCounter--;
     return ret;
 }
 
@@ -186,19 +188,32 @@ int deque_count(ctrItems_t* deque) {
 int main(void) {
     printf("Hello World!\n");
 
-    ctrItems_t myDeque = {.elementCounter = 0};
-    printf("0-Done\n");
+    ctrItems_t myDeque = initDeque();
 
-    deque_add_front(&myDeque, (void*)1);
-    printf("1-Done\n");
-    deque_add_front(&myDeque, (void*)1);
-    printf("2-Done\n");
-    deque_add_front(&myDeque, (void*)1);
-    printf("3-Done\n");
-    deque_add_front(&myDeque, (void*)1);
-    printf("4-Done\n");
-    void* disp = deque_pop_front(&myDeque);
+    deque_add_front(&myDeque, (void*)123);
+   
+    deque_add_front(&myDeque, (void*)234);
+   
+    deque_add_front(&myDeque, (void*)345);
+    
+    deque_add_front(&myDeque, (void*)456);
+
+
+    printf("Lenght: %d\n", myDeque.elementCounter);
+    printf("HeadIndex: %d, TailIndex %d\n", myDeque.headIndex, myDeque.tailIndex);
+    void* disp = deque_pop_back(&myDeque);
     printf("Popped: %d\n", (int)disp);
+    disp = deque_pop_back(&myDeque);
+    printf("Popped: %d\n", (int)disp);
+    disp = deque_pop_back(&myDeque);
+    printf("Popped: %d\n", (int)disp);
+    disp = deque_pop_back(&myDeque);
+    printf("Popped: %d\n", (int)disp);
+    disp = deque_pop_back(&myDeque);
+    printf("Popped: %d\n", (int)disp);
+
+    printf("Lenght: %d\n", myDeque.elementCounter);
+    printf("HeadIndex: %d, TailIndex %d\n", myDeque.headIndex, myDeque.tailIndex);
 
 
 
