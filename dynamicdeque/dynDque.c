@@ -3,7 +3,7 @@
 #include <string.h>
 
 int BLOCKSIZE = 256;
-int INITIAL_SIZE = 64; 
+int INITIAL_SIZE = 128; 
 
 //  [Index Block]
 //       [0]
@@ -42,8 +42,8 @@ void resizeMapHead(ctrItems_t* deque) {
         int centerMap = deque->mapLenght/2;
         int distanceToMove = centerMap - deque->headBlockIndex;
         memmove(&(deque->map[centerMap]), &(deque->map[deque->headBlockIndex]), (currentFill*sizeof(void*)) );
-        deque->headBlockIndex = deque->headBlockIndex - distanceToMove;
-        deque->tailBlockIndex = deque->tailBlockIndex - distanceToMove;
+        deque->headBlockIndex = deque->headBlockIndex + distanceToMove;
+        deque->tailBlockIndex = deque->tailBlockIndex + distanceToMove;
         return;
     }
 
@@ -55,6 +55,7 @@ void resizeMapHead(ctrItems_t* deque) {
 
     memcpy(&(newMap[X]), deque->map, deque->mapLenght*sizeof(void*));
     free(deque->map);
+    //printf("I have free'd\n");
     deque->map = newMap;
     deque->mapLenght = newMapLenght;
     deque->tailBlockIndex = deque->tailBlockIndex + X;
@@ -68,18 +69,21 @@ void resizeMapTail(ctrItems_t* deque) {
         int centerMap = deque->mapLenght/2;
         int distanceToMove = deque->tailBlockIndex - centerMap;
         memmove(&(deque->map[centerMap-distanceToMove]), &(deque->map[deque->headBlockIndex]), (currentFill*sizeof(void*)) );
-        deque->headBlockIndex = deque->headBlockIndex + distanceToMove;
-        deque->tailBlockIndex = deque->tailBlockIndex + distanceToMove;
+        deque->headBlockIndex = deque->headBlockIndex - distanceToMove;
+        deque->tailBlockIndex = deque->tailBlockIndex - distanceToMove;
         return;
     }
 
     int newMapLenght = deque->mapLenght * 2;
     void*** newMap = malloc(sizeof(void*) * newMapLenght);
-
-    memcpy(newMap, deque->map, deque->mapLenght*sizeof(void*));
+    
+    memcpy(&(newMap[0]), deque->map, deque->mapLenght*sizeof(void*));
+    printf("Ich will free'n\n");
     free(deque->map);
+    printf("I have free'd\n");
     deque->map = newMap;
     deque->mapLenght = newMapLenght;
+    
 }
 
 void deque_add_front(ctrItems_t* deque, void* item) {
@@ -107,6 +111,9 @@ void deque_add_front(ctrItems_t* deque, void* item) {
     }
     else {deque->headIndex--;}
 
+    //printf("HeadBlockIndex %d\n", deque->headBlockIndex);
+    //printf("HeadIndex: %d\n", deque->headIndex);
+
     deque->map[deque->headBlockIndex][deque->headIndex] = item;
     deque->elementCounter++;
 }
@@ -130,11 +137,14 @@ void deque_add_back(ctrItems_t* deque, void* item) {
             //map has to be resized...
             resizeMapTail(deque);
         }
-        deque->tailBlockIndex--;
+        deque->tailBlockIndex++;
         deque->map[deque->tailBlockIndex] = malloc(sizeof(void*) * BLOCKSIZE);
         deque->tailIndex = 0;
     } 
     else {deque->tailIndex++;}
+
+    //printf("TailBlockIndex %d\n", deque->tailBlockIndex);
+    //printf("TailIndex: %d\n", deque->tailIndex);
 
     deque->map[deque->tailBlockIndex][deque->tailIndex] = item;
     deque->elementCounter++;
@@ -149,11 +159,13 @@ void* deque_pop_front(ctrItems_t* deque) {
     void* ret = deque->map[deque->headBlockIndex][deque->headIndex];
     if(deque->headIndex == BLOCKSIZE - 1) {
         // have to jump back to earlyer block
-        deque->headBlockIndex--;
+        deque->headBlockIndex++;
         deque->headIndex = 0;
     }
     else{deque->headIndex++;}
+    
     deque->elementCounter--;
+    
     return ret;
 }
 
@@ -166,7 +178,7 @@ void* deque_pop_back(ctrItems_t* deque) {
     void* ret = deque->map[deque->tailBlockIndex][deque->tailIndex];
     if(deque->tailIndex == 0){
         //have to jump back to previous block
-        deque->tailBlockIndex++;
+        deque->tailBlockIndex--;
         deque->tailIndex = BLOCKSIZE - 1;
     }
     else{deque->tailIndex--;}
@@ -185,7 +197,39 @@ void* deque_look_back(ctrItems_t* deque) {
 int deque_count(ctrItems_t* deque) {
     return deque->elementCounter;
 }
-int main(void) {
+
+
+
+
+int secondText(void) {
+    int TESTNUMBER = 1000000;
+    ctrItems_t mydeque = initDeque();
+    printf("I test with %d iterations\n", TESTNUMBER);
+
+    //deque_add_front(&mydeque, (void*)50);
+    for(int i = 0; i < TESTNUMBER; i++) {
+        //printf("Index: %d\n", i);
+        deque_add_back(&mydeque, (void*)i);
+        //deque_pop_front(&mydeque);
+    }
+    printf("%d Map Elemente\n", mydeque.mapLenght);
+    printf("%d Elemente in que\n", mydeque.elementCounter);
+
+    int goal = mydeque.elementCounter;
+    /*
+    for(int x = 0; x < goal; x++) {
+        (int)deque_pop_front(&mydeque);
+        //printf("Counter %d\n", x);
+    }
+    */
+    printf("%d Map Elemente\n", mydeque.mapLenght);
+    printf("%d Elemente in que\n", mydeque.elementCounter);
+
+    printf("Done\n");
+}
+
+
+int initialTest(void) {
     printf("Hello World!\n");
 
     ctrItems_t myDeque = initDeque();
@@ -203,18 +247,20 @@ int main(void) {
     printf("HeadIndex: %d, TailIndex %d\n", myDeque.headIndex, myDeque.tailIndex);
     void* disp = deque_pop_back(&myDeque);
     printf("Popped: %d\n", (int)disp);
-    disp = deque_pop_back(&myDeque);
+    disp = deque_pop_front(&myDeque);
     printf("Popped: %d\n", (int)disp);
-    disp = deque_pop_back(&myDeque);
+    disp = deque_pop_front(&myDeque);
     printf("Popped: %d\n", (int)disp);
-    disp = deque_pop_back(&myDeque);
+    disp = deque_pop_front(&myDeque);
     printf("Popped: %d\n", (int)disp);
-    disp = deque_pop_back(&myDeque);
+    disp = deque_pop_front(&myDeque);
     printf("Popped: %d\n", (int)disp);
 
     printf("Lenght: %d\n", myDeque.elementCounter);
     printf("HeadIndex: %d, TailIndex %d\n", myDeque.headIndex, myDeque.tailIndex);
+}
 
 
-
+int main(void) {
+    secondText();
 }
