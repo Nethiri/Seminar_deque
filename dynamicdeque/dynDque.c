@@ -3,7 +3,7 @@
 #include <string.h>
 
 int BLOCKSIZE = 256;
-int INITIAL_SIZE = 128; 
+int INITIAL_SIZE = 64; 
 
 //  [Index Block]
 //       [0]
@@ -47,7 +47,6 @@ void resizeMapHead(ctrItems_t* deque) {
         return;
     }
 
-
     int newMapLenght = deque->mapLenght * 2;
     void*** newMap = malloc(sizeof(void*) * newMapLenght);
     int X = newMapLenght - deque->mapLenght;
@@ -76,11 +75,8 @@ void resizeMapTail(ctrItems_t* deque) {
 
     int newMapLenght = deque->mapLenght * 2;
     void*** newMap = malloc(sizeof(void*) * newMapLenght);
-    
     memcpy(&(newMap[0]), deque->map, deque->mapLenght*sizeof(void*));
-    printf("Ich will free'n\n");
     free(deque->map);
-    printf("I have free'd\n");
     deque->map = newMap;
     deque->mapLenght = newMapLenght;
     
@@ -133,7 +129,7 @@ void deque_add_back(ctrItems_t* deque, void* item) {
     
     if(deque->tailIndex == BLOCKSIZE - 1) {
         // new block has to be created
-        if(deque->tailBlockIndex == deque->mapLenght) {
+        if(deque->tailBlockIndex == deque->mapLenght-1) {
             //map has to be resized...
             resizeMapTail(deque);
         }
@@ -145,7 +141,6 @@ void deque_add_back(ctrItems_t* deque, void* item) {
 
     //printf("TailBlockIndex %d\n", deque->tailBlockIndex);
     //printf("TailIndex: %d\n", deque->tailIndex);
-
     deque->map[deque->tailBlockIndex][deque->tailIndex] = item;
     deque->elementCounter++;
 }
@@ -206,11 +201,9 @@ int secondText(void) {
     ctrItems_t mydeque = initDeque();
     printf("I test with %d iterations\n", TESTNUMBER);
 
-    //deque_add_front(&mydeque, (void*)50);
     for(int i = 0; i < TESTNUMBER; i++) {
-        //printf("Index: %d\n", i);
+        deque_add_front(&mydeque, (void*)i);
         deque_add_back(&mydeque, (void*)i);
-        //deque_pop_front(&mydeque);
     }
     printf("%d Map Elemente\n", mydeque.mapLenght);
     printf("%d Elemente in que\n", mydeque.elementCounter);
