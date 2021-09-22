@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
 int BLOCKSIZE = 256;
 int INITIAL_SIZE = 64; 
@@ -12,7 +13,6 @@ int INITIAL_SIZE = 64;
 //       [3]    tail = back
 //       [4] 
 //       [5]
-
 
 //todo:
 // what happens when I push front and remove back indefenetily (would wonder up and always reserve new storrage)
@@ -32,7 +32,7 @@ ctrItems_t initDeque() {
     deque.map = malloc(sizeof(void*) * INITIAL_SIZE);
     deque.mapLenght = INITIAL_SIZE;
     deque.elementCounter = 0;
-   return deque;
+    return deque;
 }
 
 void resizeMapHead(ctrItems_t* deque) {
@@ -49,9 +49,12 @@ void resizeMapHead(ctrItems_t* deque) {
 
     int newMapLenght = deque->mapLenght * 2;
     void*** newMap = malloc(sizeof(void*) * newMapLenght);
+    if(newMap == NULL) {
+        printf("Could not allocate %f memory!\n", sizeof(void*) * newMapLenght);
+        return;
+    }
+        
     int X = newMapLenght - deque->mapLenght;
-
-
     memcpy(&(newMap[X]), deque->map, deque->mapLenght*sizeof(void*));
     free(deque->map);
     //printf("I have free'd\n");
@@ -75,6 +78,11 @@ void resizeMapTail(ctrItems_t* deque) {
 
     int newMapLenght = deque->mapLenght * 2;
     void*** newMap = malloc(sizeof(void*) * newMapLenght);
+    if(newMap == NULL) {
+        printf("Could not allocate %f memorey!\n", sizeof(void*) * newMapLenght);
+        return;
+    }
+
     memcpy(&(newMap[0]), deque->map, deque->mapLenght*sizeof(void*));
     free(deque->map);
     deque->map = newMap;
@@ -103,6 +111,10 @@ void deque_add_front(ctrItems_t* deque, void* item) {
         }
         deque->headBlockIndex--;
         deque->map[deque->headBlockIndex] = malloc(sizeof(void*) * BLOCKSIZE);
+        if(deque->map[deque->headBlockIndex] == NULL) {
+            printf("Could not allocate a new Block\n");
+            return;
+        }
         deque->headIndex = BLOCKSIZE - 1;
     }
     else {deque->headIndex--;}
@@ -135,12 +147,14 @@ void deque_add_back(ctrItems_t* deque, void* item) {
         }
         deque->tailBlockIndex++;
         deque->map[deque->tailBlockIndex] = malloc(sizeof(void*) * BLOCKSIZE);
+        if(deque->map[deque->tailBlockIndex] == NULL) {
+            printf("Could not allocate a new Block\n");
+            return;
+        }
         deque->tailIndex = 0;
     } 
     else {deque->tailIndex++;}
 
-    //printf("TailBlockIndex %d\n", deque->tailBlockIndex);
-    //printf("TailIndex: %d\n", deque->tailIndex);
     deque->map[deque->tailBlockIndex][deque->tailIndex] = item;
     deque->elementCounter++;
 }
@@ -193,9 +207,6 @@ int deque_count(ctrItems_t* deque) {
     return deque->elementCounter;
 }
 
-
-
-
 int secondText(void) {
     int TESTNUMBER = 1000000;
     ctrItems_t mydeque = initDeque();
@@ -209,12 +220,11 @@ int secondText(void) {
     printf("%d Elemente in que\n", mydeque.elementCounter);
 
     int goal = mydeque.elementCounter;
-    /*
+    
     for(int x = 0; x < goal; x++) {
         (int)deque_pop_front(&mydeque);
         //printf("Counter %d\n", x);
     }
-    */
     printf("%d Map Elemente\n", mydeque.mapLenght);
     printf("%d Elemente in que\n", mydeque.elementCounter);
 
@@ -253,7 +263,20 @@ int initialTest(void) {
     printf("HeadIndex: %d, TailIndex %d\n", myDeque.headIndex, myDeque.tailIndex);
 }
 
+int TESTLENGH = 100000000;
+void Benchmark() {
+    ctrItems_t myDeque = initDeque();
+    clock_t begin = clock();
+    for(int i = 0; i < TESTLENGH; i++) {
+        deque_add_front(&myDeque, (void*)i);
+    }
+    clock_t end = clock();
+    double time_spent = (double)(end-begin) / CLOCKS_PER_SEC;
+    printf("Execution time: %f in sec\n", time_spent);
+}
+
+
 
 int main(void) {
-    secondText();
+    Benchmark();
 }
