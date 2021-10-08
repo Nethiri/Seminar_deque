@@ -99,13 +99,10 @@ void deque_add_front(void* value, deque_t* myQue){
         myQue->array[myQue->front] = value;         // and place the object I tried to save in the initial position
         return;                                     // returns the function
     }
-
     if(myQue->front + 1 % MAX == myQue->back) {     // if, when I try the front pointer + 1 % MAX == back pointer, then my deque is full
         printf("\nThe Deque is full!\n");
         return;
     }
-
-    
     if((myQue->front + 1) % MAX){                   // if the front pointer is somewhere in the array (not causing an overflow)
         myQue->front++;                             // add to the front pointer + 1 
         myQue->array[myQue->front] = value;         // place data at the new front pointers position

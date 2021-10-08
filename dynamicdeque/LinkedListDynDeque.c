@@ -76,17 +76,22 @@ void* Deque_pop_front(LinkedDeque_t* deque) {
     }
     void* ret = deque->head->data;
     
-    deque->head = deque->head->next;
+    DequeItem_t* newHead = deque->head->next;
+    free(deque->head);
+    deque->head = newHead;  
     deque->elementCount--;
     return ret;
 }
+
 void* Deque_pop_back(LinkedDeque_t* deque) {
     if(deque->elementCount == 0) {
         printf("Deque is Empty!");
         return NULL;
     }
     void* ret = deque->tail->data;
-    deque->tail = deque->tail->previous;
+    DequeItem_t* newTail = deque->tail->previous;
+    free(deque->tail);
+    deque->tail = newTail; 
     deque->elementCount--;
     return ret;
 }
