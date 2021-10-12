@@ -1,9 +1,13 @@
 #include <stdio.h>
-#define MAX 8000000
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#define MAX 70000000
 
 typedef struct deque {
     int front, back;
-    void* array[MAX];
+    //void* array[MAX];
+    void** array;
 } deque_t; 
 
 void deque_add_front(void*, deque_t*);              // adds an element to the front
@@ -96,6 +100,7 @@ void main() {
 */
 deque_t createDeque() {
     deque_t myTestingQue = {.front = -1};
+    myTestingQue.array = malloc(sizeof(void*) * MAX);
     return myTestingQue;
 }
 
