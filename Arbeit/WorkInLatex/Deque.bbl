@@ -1,0 +1,19 @@
+\begin{thebibliography}{HSAF76}
+
+\bibitem[BL99]{blumofe1999scheduling}
+Robert~D Blumofe and Charles~E Leiserson.
+\newblock Scheduling multithreaded computations by work stealing.
+\newblock {\em Journal of the ACM (JACM)}, 46(5):720--748, 1999.
+
+\bibitem[HSAF76]{horowitz1976fundamentals}
+Ellis Horowitz, Sartaj Sahni, and Susan Anderson-Freed.
+\newblock {\em Fundamentals of data structures}, volume~20.
+\newblock Computer science press Potomac, MD, 1976.
+
+\bibitem[Mac69]{maclaren1969art}
+M~Donald MacLaren.
+\newblock The art of computer programming—volume 1: Fundamental algorithms
+  (donald e. knuth).
+\newblock {\em Siam Review}, 11(1):89--91, 1969.
+
+\end{thebibliography}

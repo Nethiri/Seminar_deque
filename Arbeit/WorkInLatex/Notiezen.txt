@@ -1,0 +1,2 @@
+Grundfuntkionen (Push, Pop, Peek, ...)
+>> in Grundlagen rein!

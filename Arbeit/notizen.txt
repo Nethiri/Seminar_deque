@@ -1,0 +1,1 @@
+malloc testen ob null zurück kommt!

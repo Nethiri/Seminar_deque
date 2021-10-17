@@ -1,0 +1,8 @@
+Work Stealing
+https://theboreddev.com/the-unfairly-unknown-forkjoinpool/
+http://supertech.csail.mit.edu/papers/steal.pdf
+
+
+
+Work-Stealing: http://supertech.csail.mit.edu/papers/steal.pdf \newline
+Work-Stealing: https://theboreddev.com/the-unfairly-unknown-forkjoinpool/

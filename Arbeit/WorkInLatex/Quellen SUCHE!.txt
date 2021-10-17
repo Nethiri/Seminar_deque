@@ -1,0 +1,4 @@
+Marco... finde eine Quelle zu!
+-
+Nun gibt es historisch verschiedene Möglichkeiten Daten im Speicher zu speichern, und diese zu organisieren. Somit gibt es verschiedene Möglichkeiten eine Deque zu implementieren.
+-
