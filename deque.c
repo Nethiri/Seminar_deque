@@ -1,6 +1,6 @@
 #include <stdio.h>
 #define MAX 15
-
+//update
 typedef struct deque {
     int front, back;
     void* array[MAX];
